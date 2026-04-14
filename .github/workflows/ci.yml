@@ -29,33 +29,33 @@ jobs:
 
       # ==========================================================================
       # Build profile (workshop): enable only ONE of the SLOW / FAST blocks below.
-      # - Initial state (for main): SLOW enabled — inspect pipeline duration in Datadog
-      # - Exercise: comment out SLOW, enable FAST, push to dev — compare duration
+      # - Initial state (for main): FAST enabled — inspect pipeline duration in Datadog
+      # - Exercise: comment out FAST, enable SLOW, push to dev — compare duration
       # ==========================================================================
 
-      # ----- SLOW BUILD (default) -----
-      - name: Set up Node.js (no npm cache — slower install)
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-
-      - name: Artificial delay (workshop — remove this entire step in the FAST profile)
-        run: |
-          echo "Simulating a slow CI step for Datadog comparison..."
-          sleep 60
-
-      - name: Install dependencies
-        run: npm ci
-
-      # ----- FAST BUILD (comment out the SLOW block above, then enable below) -----
-      # - name: Set up Node.js (with npm cache)
+      # ----- SLOW BUILD (comment out FAST below, then enable) -----
+      # - name: Set up Node.js (no npm cache — slower install)
       #   uses: actions/setup-node@v4
       #   with:
       #     node-version-file: ".nvmrc"
-      #     cache: "npm"
+      #
+      # - name: Artificial delay (workshop — remove this entire step in the FAST profile)
+      #   run: |
+      #     echo "Simulating a slow CI step for Datadog comparison..."
+      #     sleep 60
       #
       # - name: Install dependencies
       #   run: npm ci
+
+      # ----- FAST BUILD (default) -----
+      - name: Set up Node.js (with npm cache)
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Test
         run: npm test
